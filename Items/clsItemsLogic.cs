@@ -1,16 +1,17 @@
-﻿using System;
+﻿using Group_Project___Main.common;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InvoiceSystem.Items
+namespace Group_Project___Main.Items
 {
     /// <summary>
     /// Class contains methods and attibutes for managing all items from the application.
     /// </summary>
-    class clsItemsLogic
+    public class clsItemsLogic
     {
         #region Attributes
         private List<clsItem> lItems;

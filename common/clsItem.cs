@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InvoiceSystem.Items
+namespace Group_Project___Main.common
 {
     /// <summary>
     /// Dataclass that stores data for an item.
@@ -35,7 +35,7 @@ namespace InvoiceSystem.Items
         /// <param name="sItemCode"> The item code. </param>
         /// <param name="sItemDesc"> The item description. </param>
         /// <param name="dItemCost"> The cost of the item. </param>
-        public clsItem(string sItemCode, string sItemDesc, decimal dItemCost) 
+        public clsItem(string sItemCode, string sItemDesc, decimal dItemCost)
         {
             ItemCode = sItemCode;
             ItemDesc = sItemDesc;

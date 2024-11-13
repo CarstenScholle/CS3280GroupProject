@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InvoiceSystem.Items
+namespace Group_Project___Main.Items
 {
     /// <summary>
     /// Class provides Methods for mapping a database operation to the corresponding SQL statement.
     /// </summary>
-    class clsItemsSQL
+    public class clsItemsSQL
     {
         #region Methods
         /// <summary>
