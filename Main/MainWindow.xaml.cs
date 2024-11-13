@@ -41,8 +41,6 @@ namespace Group_Project___Main
             // ItemsData needs to bind to ItemsList
             // InvoiceData needs to bind to InvoiceList
 
-
-
             // Show the Data
             // I think this only works for Windows Forms, not WPF
             try
@@ -121,8 +119,17 @@ namespace Group_Project___Main
         /// <param name="e"></param>
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
+            // Show respective window depending on which one is clicked
 
         }
+
+
+
+
+
+
+
+
     }
 
 

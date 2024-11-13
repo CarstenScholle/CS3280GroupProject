@@ -26,10 +26,26 @@ namespace Group_Project___Main
         /// </summary>
         public clsMainSQL db = new clsMainSQL();
 
+        
+        /// <summary>
+        /// Data Access Class
+        /// </summary>
+        public clsDataAccess da = new clsDataAccess();
+
+
         /// <summary>
         /// List of items
         /// </summary>
-        public List<string> itemList = new List<string>();
+        public List<clsItem> itemList = new List<string>();
+
+
+        /// <summary>
+        /// List of items
+        /// </summary>
+        public List<string> invoice = new List<string>();
+
+
+        public List<clsItem> Items { get { return itemList; } }
 
 
         /// <summary>
