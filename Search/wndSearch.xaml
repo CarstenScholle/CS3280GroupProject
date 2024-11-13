@@ -1,0 +1,24 @@
+﻿<Window x:Class="Group10ProjectSearchBar.Search.wndSearch"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Group10ProjectSearchBar.Search"
+        mc:Ignorable="d"
+        Title="wndSearch" Height="450" Width="800">
+    <Grid>
+        <GroupBox x:Name="gbSearchFilterOptions" HorizontalAlignment="Left" Height="152" Header="Filter By" Margin="504,44,0,0" VerticalAlignment="Top" Width="244"/>
+
+        <DataGrid x:Name="dgSearchData" HorizontalAlignment="Left" Height="319" Margin="62,92,0,0" VerticalAlignment="Top" Width="380" d:ItemsSource="{d:SampleData ItemCount=5}"/>
+        <Label x:Name="lSearchInvoiceNumber" Content="Invoice Number:" HorizontalAlignment="Left" Height="32" Margin="503,66,0,0" VerticalAlignment="Top" Width="103" HorizontalContentAlignment="Right"/>
+        <Label x:Name="lSearchInvoiceDate" Content="Invoice Date:" HorizontalAlignment="Left" Height="32" Margin="503,98,0,0" VerticalAlignment="Top" Width="103" HorizontalContentAlignment="Right"/>
+        <Label x:Name="lSearchTotalCost" Content="Total Cost:" HorizontalAlignment="Left" Height="32" Margin="503,130,0,0" VerticalAlignment="Top" Width="103" HorizontalContentAlignment="Right"/>
+        <Button x:Name="bSearchSelectInvoice" Content="Select Invoice" HorizontalAlignment="Left" Height="35" Margin="171,52,0,0" VerticalAlignment="Top" Width="104" Click="bSearchSelectInvoice_Click"/>
+        <Button x:Name="bSearchClearFilter" Content="Clear Filter" HorizontalAlignment="Left" Height="35" Margin="504,201,0,0" VerticalAlignment="Top" Width="104" Click="bSearchClearFilter_Click"/>
+        <Button x:Name="bSearchCancel" Content="Cancel" HorizontalAlignment="Left" Height="35" Margin="62,52,0,0" VerticalAlignment="Top" Width="104" Click="bSearchCancel_Click"/>
+        <ComboBox x:Name="cbSearchTotalCost" HorizontalAlignment="Left" Height="24" Margin="614,134,0,0" VerticalAlignment="Top" Width="104" SelectionChanged="cbSearchTotalCost_SelectionChanged"/>
+        <ComboBox x:Name="cbSearchInvoiceDate" HorizontalAlignment="Left" Height="26" Margin="614,102,0,0" VerticalAlignment="Top" Width="104" SelectionChanged="cbSearchInvoiceDate_SelectionChanged"/>
+        <ComboBox x:Name="cbSearchInvoiceNumber" HorizontalAlignment="Left" Height="26" Margin="614,70,0,0" VerticalAlignment="Top" Width="104" SelectionChanged="cbSearchInvoiceNumber_SelectionChanged"/>
+
+    </Grid>
+</Window>
