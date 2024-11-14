@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Group_Project___Main.common;
 
-namespace InvoiceSystem.Items
+namespace Group_Project___Main.Items
 {
     /// <summary>
     /// Interaction logic for wndItems.xaml
