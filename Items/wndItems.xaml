@@ -30,23 +30,25 @@
                         <Label x:Name="lblItemCost" Content="Cost:" Grid.Row="1"/>
                         <Label x:Name="lblItemDesc" Content="Description:" Grid.Row="2"/>
 
-                        <TextBox x:Name="txtItemCode" Grid.Column="1"/>
-                        <TextBox x:Name="txtItemCost" Grid.Row="1" Grid.Column="1"/>
-                        <TextBox x:Name="txtItemDescription" Grid.Row="2" Grid.Column="1"/>
+                        <TextBox x:Name="txtItemCode" Grid.Column="1" IsEnabled="False"/>
+                        <TextBox x:Name="txtItemCost" Grid.Row="1" Grid.Column="1" IsEnabled="False"/>
+                        <TextBox x:Name="txtItemDescription" Grid.Row="2" Grid.Column="1" IsEnabled="False"/>
                     </Grid>
-
-                    <Button x:Name="btnSaveChanges" Content="Save changes" Margin="5" Width="80" Height="25"/>
-                    <Label x:Name="lblErrorMessage" Content="Error Occured!" HorizontalAlignment="Center"/>
+                    <StackPanel x:Name="spSaveCancelChanges" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button x:Name="btnSaveChanges" Content="Save changes" Margin="5" Width="80" Height="25" Click="btnSaveChanges_Click"/>
+                        <Button x:Name="btnCancelChanges" Content="Cancel" Margin="5" Width="80" Height="25" Click="btnCancelChanges_Click"/>
+                    </StackPanel>
+                    <Label x:Name="lblErrorMessage" Content="Error Occured!" HorizontalAlignment="Center" Foreground="#FFD91414"/>
 
                     <StackPanel x:Name="spButtonControlls" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button x:Name="btnAddItem" Content="Add Item" Margin="5" Width="80" Height="25"/>
-                        <Button x:Name="btnEditItem" Content="Edit Item" Margin="5" Width="80" Height="25"/>
-                        <Button x:Name="btnDeleteItem" Content="Delete Item" Margin="5" Width="80" Height="25"/>
+                        <Button x:Name="btnAddItem" Content="Add Item" Margin="5" Width="80" Height="25" Click="btnAddItem_Click"/>
+                        <Button x:Name="btnEditItem" Content="Edit Item" Margin="5" Width="80" Height="25" Click="btnEditItem_Click"/>
+                        <Button x:Name="btnDeleteItem" Content="Delete Item" Margin="5" Width="80" Height="25" Click="btnDeleteItem_Click"/>
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
         </StackPanel>
         <!-- Datagrid for displaying the items -->
-        <DataGrid x:Name="dgItems" Grid.Column="1" d:ItemsSource="{d:SampleData ItemCount=30}" IsReadOnly="True"/>
+        <DataGrid x:Name="dgItems" Grid.Column="1" d:ItemsSource="{d:SampleData ItemCount=30}" IsReadOnly="True" SelectionChanged="dgItems_SelectionChanged"/>
     </Grid>
 </Window>
