@@ -8,6 +8,8 @@ using System.Data;
 using System.Data.OleDb;
 using System.Data.SqlClient;
 
+using Group_Project___Main.common;
+
 namespace Group_Project___Main
 {
     // Maybe try inheritance? clsMainLogic : clsMainSQL?
@@ -21,10 +23,14 @@ namespace Group_Project___Main
 
     internal class clsMainLogic
     {
+
+
+        #region Attributes
+
         /// <summary>
         /// Data base
         /// </summary>
-        public clsMainSQL db = new clsMainSQL();
+        public clsMainSQL sql = new clsMainSQL();
 
         
         /// <summary>
@@ -34,20 +40,37 @@ namespace Group_Project___Main
 
 
         /// <summary>
-        /// List of items
+        /// Invoice number
         /// </summary>
-        public List<clsItem> itemList = new List<string>();
+        public int InvoiceNumber;
 
 
         /// <summary>
-        /// List of items
+        /// List of items for the ComboBox
         /// </summary>
-        public List<string> invoice = new List<string>();
+        public List<string> ItemList = new List<string>();
 
 
-        public List<clsItem> Items { get { return itemList; } }
+        /// <summary>
+        /// List of items for the invoice
+        /// </summary>
+        public List<clsItem> InvoiceItems = new List<clsItem>();
 
 
+        /// <summary>
+        /// Default invoice number
+        /// </summary>
+        private int defaultInvoice = 5000;
+
+        #endregion
+
+
+
+        #region Properties
+        #endregion
+
+
+        #region Constructor
         /// <summary>
         /// clsMainLogic Constructor
         /// </summary>
@@ -55,25 +78,44 @@ namespace Group_Project___Main
         {
 
         }
+        #endregion
 
+
+        #region Methods
 
         /// <summary>
         /// Method that fills the data for both item list and invoice datagrid
         /// </summary>
         public void FillData()
         {
-            int iRetVal = 0;
-            DataSet ds = db.GetDataSet("SELECT ItemDesc FROM ItemDesc;", ref iRetVal);
 
-            DataTable table = ds.Tables[0];
+
 
             // Fills the Items List
+            int iRetVal = 0;
+            DataSet ds = da.ExecuteSQLStatement(sql.SelectItemData(), ref iRetVal);
+            DataTable table = ds.Tables[0];
+
             foreach (DataRow row in table.Rows)
             {
-                itemList.Add(row["ItemDesc"].ToString());
+                ItemList.Add(row["ItemDesc"].ToString());
             }
 
-            // Fills the Invoice Data Grid
+
+            // Fills the Invoice Data Grid with default value
+            ds = da.ExecuteSQLStatement(sql.SelectInvoiceItems(defaultInvoice.ToString()), ref iRetVal);
+            table = ds.Tables[0];
+
+            foreach (DataRow row in table.Rows)
+            {
+                string code = (string)row["ItemCode"];
+                string desc = (string)row["ItemDesc"];
+                decimal cost = (decimal)row["Cost"];
+
+                InvoiceItems.Add(new clsItem(code, desc, cost));
+            }
+
+            InvoiceNumber = defaultInvoice;
 
         }
 
@@ -96,7 +138,7 @@ namespace Group_Project___Main
         {
 
         }
-
+        #endregion
 
 
 

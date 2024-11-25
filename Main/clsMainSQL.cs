@@ -45,6 +45,34 @@ namespace Group_Project___Main
         }
 
 
+        public string SelectInvoiceItems(string sInvoiceID)
+        {
+            try
+            {
+                string sSql = "SELECT ItemDesc.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost FROM LineItems INNER JOIN ItemDesc ON ItemDesc.ItemCode = LineItems.ItemCode WHERE InvoiceNum = " + sInvoiceID;
+                return sSql;
+            } catch
+            {
+                throw;
+            }
+        }
+
+
+        public string SelectItemData()
+        {
+            try
+            {
+                string sSQL = "SELECT ItemDesc FROM ItemDesc;";
+                return sSQL;
+            } catch
+            {
+                throw;
+            }
+        }
+
+
+
+
 
 
 

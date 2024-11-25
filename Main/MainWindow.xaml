@@ -6,6 +6,13 @@
         xmlns:local="clr-namespace:Group_Project___Main"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    
+    <!-- Setting DataContext here doesn't work. Do the attributes have to be static? -->
+    <Window.DataContext>
+        <local:clsMainLogic/>
+    </Window.DataContext>
+    
+    
     <Grid>
         <Label x:Name="InvoiceNumber" Content="Invoice Number: " HorizontalAlignment="Left" Margin="79,40,0,0" VerticalAlignment="Top"/>
         <Label x:Name="InvoiceDate" Content="Invoice Date: " HorizontalAlignment="Left" Margin="79,71,0,0" VerticalAlignment="Top"/>
@@ -21,13 +28,13 @@
             <MenuItem Header="Edit Inventory"/>
         </Menu>
 
-        <DataGrid d:ItemsSource="{Binding InvoiceData}" Width="400" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,25,25,0" Height="400"/>
+        <DataGrid x:Name="dgInvoice" Width="400" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,25,25,0" Height="400"/>
 
         <Button Content="Save Invoice" HorizontalAlignment="Left" Margin="94,153,0,0" VerticalAlignment="Top" Click="Save_Button_Click"/>
         <Button Content="Add Item" HorizontalAlignment="Left" Margin="216,327,0,0" VerticalAlignment="Top" Click="AddItem_Button_Click"/>
         <Button Content="Delete Item" HorizontalAlignment="Left" Margin="216,361,0,0" VerticalAlignment="Top" Click="DeleteItem_Button_Click"/>
 
-        <ComboBox d:ItemsSource="{Binding itemList}" HorizontalAlignment="Left" Margin="67,229,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBox_SelectionChanged"/>
+        <ComboBox x:Name="cbItemList" HorizontalAlignment="Left" Margin="67,229,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBox_SelectionChanged"/>
 
 
     </Grid>
