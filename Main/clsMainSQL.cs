@@ -57,14 +57,40 @@ namespace Group_Project___Main
             }
         }
 
-
-        public string SelectItemData()
+        public string SelectInvoiceItemData()
         {
             try
             {
                 string sSQL = "SELECT ItemDesc FROM ItemDesc;";
                 return sSQL;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+
+        public string SelectItemData(string sItemName)
+        {
+            try
+            {
+                string sSQL = "SELECT * FROM ItemDesc WHERE ItemDesc = '" + sItemName + "';";
+                return sSQL;
             } catch
+            {
+                throw;
+            }
+        }
+
+        public string DeleteSelectedItem(string sInvoiceID, string sItemCode)
+        {
+            try
+            {
+                string sSQL = "DELETE FROM LineItems WHERE InvoiceNum = " + sInvoiceID + " AND ItemCode = " + sItemCode + ";";
+                return sSQL;
+            }
+            catch
             {
                 throw;
             }

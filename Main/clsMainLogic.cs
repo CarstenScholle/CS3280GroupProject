@@ -9,6 +9,10 @@ using System.Data.OleDb;
 using System.Data.SqlClient;
 
 using Group_Project___Main.common;
+using System.Windows.Documents;
+using System.Windows.Controls;
+using System.Windows;
+using System.Windows.Controls.Primitives;
 
 namespace Group_Project___Main
 {
@@ -40,9 +44,18 @@ namespace Group_Project___Main
 
 
         /// <summary>
-        /// Invoice number
+        /// Invoice number, Invoice date, Invoice total
         /// </summary>
-        public int InvoiceNumber;
+        public int InvoiceNumber = 5000;
+        public string InvoiceDate;
+        public decimal InvoiceTotal;
+
+        /// <summary>
+        /// Selected Item for the combobox
+        /// </summary>
+        public string SelectedItem;
+        public decimal SelectedItemCost;
+        public string SelectedItemCode;
 
 
         /// <summary>
@@ -56,11 +69,6 @@ namespace Group_Project___Main
         /// </summary>
         public List<clsItem> InvoiceItems = new List<clsItem>();
 
-
-        /// <summary>
-        /// Default invoice number
-        /// </summary>
-        private int defaultInvoice = 5000;
 
         #endregion
 
@@ -93,7 +101,7 @@ namespace Group_Project___Main
 
             // Fills the Items List
             int iRetVal = 0;
-            DataSet ds = da.ExecuteSQLStatement(sql.SelectItemData(), ref iRetVal);
+            DataSet ds = da.ExecuteSQLStatement(sql.SelectInvoiceItemData(), ref iRetVal);
             DataTable table = ds.Tables[0];
 
             foreach (DataRow row in table.Rows)
@@ -103,7 +111,7 @@ namespace Group_Project___Main
 
 
             // Fills the Invoice Data Grid with default value
-            ds = da.ExecuteSQLStatement(sql.SelectInvoiceItems(defaultInvoice.ToString()), ref iRetVal);
+            ds = da.ExecuteSQLStatement(sql.SelectInvoiceItems(InvoiceNumber.ToString()), ref iRetVal);
             table = ds.Tables[0];
 
             foreach (DataRow row in table.Rows)
@@ -115,19 +123,31 @@ namespace Group_Project___Main
                 InvoiceItems.Add(new clsItem(code, desc, cost));
             }
 
-            InvoiceNumber = defaultInvoice;
+
+            UpdateInvoiceInfo();
+
 
         }
 
 
-        // Should this be done using data binding instead?
+        
 
         /// <summary>
         /// Method that updates the item info for the selected item
         /// </summary>
         public void UpdateItemInfo()
         {
+            // Update Invoice Label information
+            int iRetVal = 0;
+            DataSet ds = da.ExecuteSQLStatement(sql.SelectItemData(SelectedItem), ref iRetVal);
+            DataTable table = ds.Tables[0];
 
+            foreach (DataRow row in table.Rows)
+            {
+                SelectedItem = (string)row["ItemDesc"];
+                SelectedItemCost = (decimal)row["Cost"];
+                SelectedItemCode = (string)row["ItemCode"];
+            }
         }
 
 
@@ -137,6 +157,48 @@ namespace Group_Project___Main
         public void UpdateInvoiceInfo()
         {
 
+            // Update Invoice Label information
+            int iRetVal = 0;
+            DataSet ds = da.ExecuteSQLStatement(sql.SelectInvoiceData(InvoiceNumber.ToString()), ref iRetVal);
+            DataTable table = ds.Tables[0];
+
+            foreach (DataRow row in table.Rows) // Will only go through 1 row, but this is the only way I know how to access it
+            {
+                InvoiceNumber = (int)row["InvoiceNum"];
+                DateTime d = (DateTime)row["InvoiceDate"];
+                InvoiceDate = d.ToString();
+                InvoiceTotal = (decimal)row["TotalCost"];
+            }
+
+        }
+
+        /// <summary>
+        /// Method for adding selected item to the invoice
+        /// </summary>
+        public void AddItem()
+        {
+            InvoiceItems.Add(new clsItem(SelectedItemCode, SelectedItem, SelectedItemCost));
+        }
+        // For some reason, this isn't updating the InvoiceItems
+
+
+        /// <summary>
+        /// Method for deleting selected item in invoice list and DB
+        /// </summary>
+        /// <param name="name"></param>
+        public void DeleteItem(object SI)
+        {
+            clsItem SelectedItem = (clsItem)SI;
+
+            InvoiceItems.Remove(SelectedItem);
+
+            //Delete Item from Database
+            string sSQL = sql.DeleteSelectedItem(InvoiceNumber.ToString(), SelectedItem.ItemCode);
+            int iRetVal = da.ExecuteNonQuery(sSQL);
+            //Getting an error here for some reason.
+            //Error says no value is given for required parameters.
+            
+            
         }
         #endregion
 
