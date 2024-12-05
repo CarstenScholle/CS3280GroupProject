@@ -9,7 +9,7 @@ namespace Group_Project___Main
     /// </summary>
     public partial class App : Application
     {
-
+        
     }
 
 }

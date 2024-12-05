@@ -55,13 +55,9 @@ namespace Group_Project___Main
                 cbItemList.ItemsSource = mainLogic.ItemList;
 
 
+                MainRefresh();
 
-
-                mainLogic.FillData();
-
-                lblInvoiceNumber.Content = "Invoice Number: " + mainLogic.InvoiceNumber;
-                lblInvoiceDate.Content = "Invoice Date: " + mainLogic.InvoiceDate;
-                lblInvoiceTotal.Content = "Invoice Total: " + mainLogic.InvoiceTotal;
+                
 
             }
             catch (Exception ex)
@@ -69,6 +65,23 @@ namespace Group_Project___Main
                 MessageBox.Show(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
 
+        }
+        
+        /// <summary>
+        /// method that refreshes the invoice data grid
+        /// </summary>
+        private void MainRefresh()
+        {
+            mainLogic.FillData();
+
+            lblInvoiceNumber.Content = "Invoice Number: " + mainLogic.InvoiceNumber;
+            lblInvoiceDate.Content = "Invoice Date: " + mainLogic.InvoiceDate;
+            
+            dgInvoice.Items.Refresh();
+
+            
+
+            lblInvoiceTotal.Content = "Invoice Total: " + mainLogic.InvoiceTotal;
         }
 
 
@@ -95,14 +108,15 @@ namespace Group_Project___Main
 
 
         /// <summary>
-        /// This method is called when the save button is clicked
+        /// This method is called when the create invoice button is clicked
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Save_Button_Click(object sender, RoutedEventArgs e)
+        private void CreateInvoice_Click(object sender, RoutedEventArgs e)
         {
-            
-            
+            mainLogic.CreateInvoice();
+            MainRefresh();
+
         }
 
 
@@ -115,6 +129,7 @@ namespace Group_Project___Main
         {
             mainLogic.AddItem();
             dgInvoice.Items.Refresh();
+            lblInvoiceTotal.Content = "Invoice Total: " + mainLogic.InvoiceTotal;
         }
 
         /// <summary>
@@ -132,6 +147,7 @@ namespace Group_Project___Main
                 // I thought when you remove an item from the list ItemsSource is set to
                 // the item will be removed on the GUI as well because of DataBinding
                 dgInvoice.Items.Refresh();
+                lblInvoiceTotal.Content = "Invoice Total: " + mainLogic.InvoiceTotal;
             }
             
         }
@@ -154,8 +170,7 @@ namespace Group_Project___Main
             mainLogic.FillData();
             cbItemList.Items.Refresh();
 
-            // Passing data around
-            //string sSearchedItem = searchWindow.SelectedInvoiceID();
+            
         }
 
         /// <summary>
@@ -171,6 +186,24 @@ namespace Group_Project___Main
             this.Show();
             // Passing data around
             string sSearchedItem = searchWindow.SelectedInvoiceID();
+            if (sSearchedItem != null)
+            {
+                mainLogic.InvoiceNumber = int.Parse(sSearchedItem);
+                mainLogic.UpdateInvoiceInfo();
+            }
+            MainRefresh();
+        }
+
+
+
+        /// <summary>
+        /// Makes sure application actually closes because for some reason it doesn't when you close it
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 

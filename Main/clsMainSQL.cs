@@ -110,14 +110,11 @@ namespace Group_Project___Main
         }
 
 
-
-
-
-        public string InsertItem()
+        public string GetLineItemNum(string invoiceNum)
         {
             try
             {
-                //string sSQL = "INSERT INTO LineItems(InvoiceNum, LineItemNum, ItemCode) VALUES(" + ;
+                string sSQL = "SELECT LineItemNum FROM LineItems WHERE InvoiceNum = " + invoiceNum + " ORDER BY LineItemNum DESC;";
                 return sSQL;
             }
             catch
@@ -126,11 +123,38 @@ namespace Group_Project___Main
             }
         }
 
-        public string InsertInvoice(string sInvoiceID, decimal totalCost)
+
+        public string InsertItem(string invoiceNum, string lineItem, string itemCode)
         {
             try
             {
-                //string sSQL = "UPDATE Invoices SET TotalCost = " + totalCost + " WHERE InvoiceNum = " + sInvoiceID;
+                string sSQL = "INSERT INTO LineItems(InvoiceNum, LineItemNum, ItemCode) VALUES(" + invoiceNum + "," + lineItem + ",'" + itemCode + "');";
+                return sSQL;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public string InsertInvoice(string invoiceNum, string invoiceDate)
+        {
+            try
+            {
+                string sSQL = "INSERT INTO Invoices(InvoiceNum, InvoiceDate, TotalCost) VALUES(" + invoiceNum + ",#" + invoiceDate + "#," + 0 + ");";
+                return sSQL;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public string GetInvoiceNum()
+        {
+            try
+            {
+                string sSQL = "SELECT InvoiceNum FROM Invoices ORDER BY InvoiceNum DESC;";
                 return sSQL;
             }
             catch

@@ -146,7 +146,7 @@ namespace Group_Project___Main
         /// </summary>
         public void UpdateItemInfo()
         {
-            // Update Invoice Label information
+            // Updates Invoice Label information
             int iRetVal = 0;
             DataSet ds = da.ExecuteSQLStatement(sql.SelectItemData(SelectedItem), ref iRetVal);
             DataTable table = ds.Tables[0];
@@ -171,13 +171,26 @@ namespace Group_Project___Main
             DataSet ds = da.ExecuteSQLStatement(sql.SelectInvoiceData(InvoiceNumber.ToString()), ref iRetVal);
             DataTable table = ds.Tables[0];
 
-            foreach (DataRow row in table.Rows) // Will only go through 1 row, but this is the only way I know how to access it
+            foreach (DataRow row in table.Rows) // Will only go through 1 row, but this is the only way I know how to access it rn
             {
                 InvoiceNumber = (int)row["InvoiceNum"];
                 DateTime d = (DateTime)row["InvoiceDate"];
                 InvoiceDate = d.ToString();
                 InvoiceTotal = (decimal)row["TotalCost"];
             }
+
+            // Double check that invoice total is correct
+            decimal total = 0;
+            foreach (var item in InvoiceItems)
+            {
+                total += item.ItemCost;
+            }
+            if(InvoiceTotal != total)
+            {
+                InvoiceTotal = total;
+                da.ExecuteNonQuery(sql.UpdateInvoiceCost(InvoiceNumber.ToString(), InvoiceTotal));
+            }
+            
 
         }
 
@@ -187,8 +200,42 @@ namespace Group_Project___Main
         public void AddItem()
         {
             InvoiceItems.Add(new clsItem(SelectedItemCode, SelectedItem, SelectedItemCost));
+
+            InvoiceTotal += SelectedItemCost;
+
+
+            da.ExecuteNonQuery(sql.UpdateInvoiceCost(InvoiceNumber.ToString(), InvoiceTotal));
+
+
+            // An inelegant way of adding 1 to the the line number
+            int iRetVal = 0;
+            string lineNum = sql.GetLineItemNum(InvoiceNumber.ToString());
+            DataSet ds = da.ExecuteSQLStatement(lineNum, ref iRetVal);
+            DataTable dt = ds.Tables[0];
+            int lineNumInt;
+            if (dt.Rows.Count > 0)
+            {
+                DataRow dr = dt.Rows[0];
+                lineNumInt = (int)dr["LineItemNum"] + 1;
+            } else
+            {
+                lineNumInt = 1;
+            }
+
+            /*
+            int lineNumInt = int.Parse(lineNum);
+            lineNumInt++;
+            lineNum = lineNumInt.ToString();
+            */
+
+            // Insert new item into the database
+            string sSQL = sql.InsertItem(InvoiceNumber.ToString(), lineNumInt.ToString(), SelectedItemCode);
+            da.ExecuteNonQuery(sSQL);
+
         }
-        // For some reason, this isn't updating the InvoiceItems
+
+
+        
 
 
         /// <summary>
@@ -197,17 +244,57 @@ namespace Group_Project___Main
         /// <param name="name"></param>
         public void DeleteItem(object SI)
         {
+
+
             clsItem SelectedItem = (clsItem)SI;
+            decimal itemCost = SelectedItem.ItemCost;
+            InvoiceTotal -= itemCost;
+
             InvoiceItems.Remove(SelectedItem);
+
+            da.ExecuteNonQuery(sql.UpdateInvoiceCost(InvoiceNumber.ToString(), InvoiceTotal));
 
             //Delete Item from Database
             string sSQL = sql.DeleteSelectedItem(InvoiceNumber.ToString(), SelectedItem.ItemCode);
             da.ExecuteNonQuery(sSQL);
             //Getting an error here for some reason.
             //Error says no value is given for required parameters.
+
+
+        }
+
+        /// <summary>
+        /// Method for creating a new invoice
+        /// </summary>
+        public void CreateInvoice()
+        {
+            // An inelegant way of adding 1 to the the highest invoice number
+            int iRetVal = 0;
+            string lineNum = sql.GetInvoiceNum();
+            DataSet ds = da.ExecuteSQLStatement(lineNum, ref iRetVal);
+            DataTable dt = ds.Tables[0];
             
+
+            if (dt.Rows.Count > 0)
+            {
+                DataRow dr = dt.Rows[0];
+                InvoiceNumber = (int)dr["InvoiceNum"] + 1;
+            }
+            else
+            {
+                InvoiceNumber = 5000; // default lowest invoice number
+            }
+
+            InvoiceDate = DateTime.Today.ToString();
+            InvoiceTotal = 0;
+
+            da.ExecuteNonQuery(sql.InsertInvoice(InvoiceNumber.ToString(), DateTime.Today.ToString()));
             
         }
+
+
+
+
         #endregion
 
 

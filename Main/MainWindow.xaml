@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Group_Project___Main"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" Closed="Window_Closed">
 
     <!-- Setting DataContext here doesn't work. Do the attributes have to be static? -->
     <Window.DataContext>
@@ -27,12 +27,11 @@
         </Menu>
 
         <DataGrid x:Name="dgInvoice" Width="400" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,25,25,0" Height="400"/>
-
-        <Button Content="Save Invoice" HorizontalAlignment="Left" Margin="94,153,0,0" VerticalAlignment="Top" Click="Save_Button_Click"/>
         <Button Content="Add Item" HorizontalAlignment="Left" Margin="43,346,0,0" VerticalAlignment="Top" Click="AddItem_Button_Click"/>
-        <Button Content="Delete Item" HorizontalAlignment="Left" Margin="274,229,0,0" VerticalAlignment="Top" Click="DeleteItem_Button_Click"/>
+        <Button Content="Delete Item" HorizontalAlignment="Left" Margin="289,346,0,0" VerticalAlignment="Top" Click="DeleteItem_Button_Click"/>
 
         <ComboBox x:Name="cbItemList" HorizontalAlignment="Left" Margin="67,229,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBox_SelectionChanged"/>
+        <Button Content="Create New Invoice" HorizontalAlignment="Left" Margin="73,149,0,0" VerticalAlignment="Top" Click="CreateInvoice_Click"/>
 
 
     </Grid>
