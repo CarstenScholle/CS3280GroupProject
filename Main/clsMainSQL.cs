@@ -87,7 +87,7 @@ namespace Group_Project___Main
         {
             try
             {
-                string sSQL = "DELETE FROM LineItems WHERE InvoiceNum = " + sInvoiceID + " AND ItemCode = " + sItemCode + ";";
+                string sSQL = "DELETE FROM LineItems WHERE InvoiceNum = " + sInvoiceID + " AND ItemCode = '" + sItemCode + "';";
                 return sSQL;
             }
             catch
@@ -95,6 +95,50 @@ namespace Group_Project___Main
                 throw;
             }
         }
+
+        public string UpdateInvoiceCost(string sInvoiceID, decimal totalCost)
+        {
+            try
+            {
+                string sSQL = "UPDATE Invoices SET TotalCost = " + totalCost + " WHERE InvoiceNum = " + sInvoiceID;
+                return sSQL;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+
+
+
+
+        public string InsertItem()
+        {
+            try
+            {
+                //string sSQL = "INSERT INTO LineItems(InvoiceNum, LineItemNum, ItemCode) VALUES(" + ;
+                return sSQL;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public string InsertInvoice(string sInvoiceID, decimal totalCost)
+        {
+            try
+            {
+                //string sSQL = "UPDATE Invoices SET TotalCost = " + totalCost + " WHERE InvoiceNum = " + sInvoiceID;
+                return sSQL;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
 
 
 

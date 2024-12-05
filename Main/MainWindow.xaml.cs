@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using Group_Project___Main.Items;
+using System.Data;
 using System.Diagnostics.Eventing.Reader;
 using System.Reflection;
 using System.Text;
@@ -30,7 +31,8 @@ namespace Group_Project___Main
 
         clsMainLogic mainLogic = new clsMainLogic();
 
-        //wndSearch mywndSearch = new wndSearch;
+        wndSearch searchWindow;
+        wndItems itemsWindow;
         
 
 
@@ -43,15 +45,15 @@ namespace Group_Project___Main
             {
                 InitializeComponent();
 
+                Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
                 
-                //DataContext = mainLogic;
+
+                
+
 
                 dgInvoice.ItemsSource = mainLogic.InvoiceItems;
                 cbItemList.ItemsSource = mainLogic.ItemList;
 
-
-                //InvoiceDate.Content = mainLogic.InvoiceDate;
-                //InvoiceTotal.Content = mainLogic.InvoiceTotal;
 
 
 
@@ -99,8 +101,7 @@ namespace Group_Project___Main
         /// <param name="e"></param>
         private void Save_Button_Click(object sender, RoutedEventArgs e)
         {
-            // Save to DB
-
+            
             
         }
 
@@ -113,6 +114,7 @@ namespace Group_Project___Main
         private void AddItem_Button_Click(object sender, RoutedEventArgs e)
         {
             mainLogic.AddItem();
+            dgInvoice.Items.Refresh();
         }
 
         /// <summary>
@@ -129,37 +131,47 @@ namespace Group_Project___Main
                 //dgInvoice.ItemsSource = mainLogic.InvoiceItems;
                 // I thought when you remove an item from the list ItemsSource is set to
                 // the item will be removed on the GUI as well because of DataBinding
+                dgInvoice.Items.Refresh();
             }
             
         }
 
+
         /// <summary>
-        /// This method is called when a menu item is clicked
+        /// Method for opening the Edit Invoice window
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        private void Edit_Invoices_Click(object sender, RoutedEventArgs e)
         {
-            // Show respective window depending on which one is clicked
-            var MI = sender as MenuItem;
-            if (MI != null)
-            {
-                if (MI.Header == "Search Invoices") {
-                    this.Hide();
-                    wndSearch.ShowDialogue();
-                }
-                else
-            }
+            this.Hide();
+            itemsWindow = new wndItems();
+            itemsWindow.openWindow();
+            this.Show();
+
+
+            // refresh item list combobox
+            mainLogic.FillData();
+            cbItemList.Items.Refresh();
+
+            // Passing data around
+            //string sSearchedItem = searchWindow.SelectedInvoiceID();
         }
-    }
 
-
-
-
-
-
-
-
+        /// <summary>
+        /// Method for opening the Search Invoice window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Search_Invoices_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            searchWindow = new wndSearch();
+            searchWindow.ShowDialog();
+            this.Show();
+            // Passing data around
+            string sSearchedItem = searchWindow.SelectedInvoiceID();
+        }
     }
 
 

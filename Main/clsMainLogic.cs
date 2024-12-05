@@ -97,7 +97,10 @@ namespace Group_Project___Main
         public void FillData()
         {
 
-
+            if (ItemList.Count > 0)
+            {
+                ItemList.Clear();
+            }
 
             // Fills the Items List
             int iRetVal = 0;
@@ -109,6 +112,12 @@ namespace Group_Project___Main
                 ItemList.Add(row["ItemDesc"].ToString());
             }
 
+
+
+            if (InvoiceItems.Count > 0)
+            {
+                InvoiceItems.Clear();
+            }
 
             // Fills the Invoice Data Grid with default value
             ds = da.ExecuteSQLStatement(sql.SelectInvoiceItems(InvoiceNumber.ToString()), ref iRetVal);
@@ -189,12 +198,11 @@ namespace Group_Project___Main
         public void DeleteItem(object SI)
         {
             clsItem SelectedItem = (clsItem)SI;
-
             InvoiceItems.Remove(SelectedItem);
 
             //Delete Item from Database
             string sSQL = sql.DeleteSelectedItem(InvoiceNumber.ToString(), SelectedItem.ItemCode);
-            int iRetVal = da.ExecuteNonQuery(sSQL);
+            da.ExecuteNonQuery(sSQL);
             //Getting an error here for some reason.
             //Error says no value is given for required parameters.
             
