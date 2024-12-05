@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,7 +20,14 @@ namespace Group_Project___Main.Items
         /// <returns> SQL statement for selecting all items from the ItemDesc Table. </returns>
         public string SelectAllItems()
         {
-            return "SELECT ItemCode, ItemDesc, Cost FROM ItemDesc";
+            try
+            {
+                return "SELECT ItemCode, ItemDesc, Cost FROM ItemDesc";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -29,7 +37,14 @@ namespace Group_Project___Main.Items
         /// <returns> SQL statement for selecting the Invoice number from the LineItems Table. </returns>
         public string SelectInvoiceNumForItem(string sItemCode)
         {
-            return $"SELECT distinct(InvoiceNum) FROM LineItems WHERE ItemCode = '{sItemCode}'";
+            try
+            {
+                return $"SELECT distinct(InvoiceNum) FROM LineItems WHERE ItemCode = '{sItemCode}'";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -41,7 +56,14 @@ namespace Group_Project___Main.Items
         /// <returns> SQL statement for updating an item from the ItemDesc Table. </returns>
         public string UpdateItem(string sItemCode, string sItemDesc, decimal dItemCost)
         {
-            return $"UPDATE ItemDesc SET ItemDesc = '{sItemDesc}', Cost = {dItemCost} WHERE ItemCode = '{sItemCode}'";
+            try
+            {
+                return $"UPDATE ItemDesc SET ItemDesc = '{sItemDesc}', Cost = {dItemCost} WHERE ItemCode = '{sItemCode}'";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -53,7 +75,14 @@ namespace Group_Project___Main.Items
         /// <returns> SQL statement for adding an item to the ItemDesc Table. </returns>
         public string AddItem(string sItemCode, string sItemDesc, decimal dItemCost)
         {
-            return $"Insert into ItemDesc(ItemCode, ItemDesc, Cost) Values('{sItemCode}', '{sItemDesc}', {dItemCost})";
+            try
+            {
+                return $"Insert into ItemDesc(ItemCode, ItemDesc, Cost) Values('{sItemCode}', '{sItemDesc}', {dItemCost})";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -63,7 +92,14 @@ namespace Group_Project___Main.Items
         /// <returns> SQL statement for removing an item from the ItemDesc Table. </returns>
         public string DeleteItem(string sItemCode)
         {
-            return $"Delete from ItemDesc Where ItemCode = '{sItemCode}'";
+            try
+            {
+                return $"Delete from ItemDesc Where ItemCode = '{sItemCode}'";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
         #endregion
     }
