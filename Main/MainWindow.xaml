@@ -28,12 +28,12 @@
 
         <DataGrid x:Name="dgInvoice" Width="400" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,25,25,0" Height="400" IsEnabled="False"/>
         <Button x:Name="btnAdd" Content="Add Item" HorizontalAlignment="Left" Margin="43,346,0,0" VerticalAlignment="Top" Click="AddItem_Button_Click" IsEnabled="False"/>
-        <Button x:Name="btnDelete" Content="Delete Item" HorizontalAlignment="Left" Margin="289,346,0,0" VerticalAlignment="Top" Click="DeleteItem_Button_Click" IsEnabled="False"/>
+        <Button x:Name="btnDelete" Content="Delete Item" HorizontalAlignment="Left" Margin="273,346,0,0" VerticalAlignment="Top" Click="DeleteItem_Button_Click" IsEnabled="False"/>
 
         <ComboBox x:Name="cbItemList" HorizontalAlignment="Left" Margin="67,229,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBox_SelectionChanged" IsEnabled="False"/>
-        <Button x:Name="btnCreate" Content="Create New Invoice" HorizontalAlignment="Left" Margin="120,146,0,0" VerticalAlignment="Top" Click="CreateInvoice_Click"/>
+        <Button x:Name="btnCreate" Content="Create New Invoice" HorizontalAlignment="Left" Margin="32,148,0,0" VerticalAlignment="Top" Click="CreateInvoice_Click"/>
         <Button x:Name="btnEdit" Content="Edit Invoice" HorizontalAlignment="Left" Margin="32,192,0,0" VerticalAlignment="Top" Click="btnEdit_Click" />
-        <Button x:Name="btnSave" Content="Save Invoice" HorizontalAlignment="Left" Margin="215,192,0,0" VerticalAlignment="Top" Click="btnSave_Click" />
+        <Button x:Name="btnSave" Content="Save Invoice" HorizontalAlignment="Left" Margin="232,192,0,0" VerticalAlignment="Top" Click="btnSave_Click" />
 
 
     </Grid>
