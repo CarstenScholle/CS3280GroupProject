@@ -13,6 +13,7 @@ using System.Windows.Documents;
 using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Controls.Primitives;
+using System.Reflection;
 
 namespace Group_Project___Main
 {
@@ -47,14 +48,30 @@ namespace Group_Project___Main
         /// Invoice number, Invoice date, Invoice total
         /// </summary>
         public int InvoiceNumber = 5000;
+
+        /// <summary>
+        /// Invoice date
+        /// </summary>
         public string InvoiceDate;
+
+        /// <summary>
+        /// Invoice total
+        /// </summary>
         public decimal InvoiceTotal;
 
         /// <summary>
         /// Selected Item for the combobox
         /// </summary>
         public string SelectedItem;
+
+        /// <summary>
+        /// Selected Item cost
+        /// </summary>
         public decimal SelectedItemCost;
+
+        /// <summary>
+        /// Selecte Item code
+        /// </summary>
         public string SelectedItemCode;
 
 
@@ -96,45 +113,49 @@ namespace Group_Project___Main
         /// </summary>
         public void FillData()
         {
+            try {
+                if (ItemList.Count > 0)
+                {
+                    ItemList.Clear();
+                }
 
-            if (ItemList.Count > 0)
-            {
-                ItemList.Clear();
+                // Fills the Items List
+                int iRetVal = 0;
+                DataSet ds = da.ExecuteSQLStatement(sql.SelectInvoiceItemData(), ref iRetVal);
+                DataTable table = ds.Tables[0];
+
+                foreach (DataRow row in table.Rows)
+                {
+                    ItemList.Add(row["ItemDesc"].ToString());
+                }
+
+
+
+                if (InvoiceItems.Count > 0)
+                {
+                    InvoiceItems.Clear();
+                }
+
+                // Fills the Invoice Data Grid with default value
+                ds = da.ExecuteSQLStatement(sql.SelectInvoiceItems(InvoiceNumber.ToString()), ref iRetVal);
+                table = ds.Tables[0];
+
+                foreach (DataRow row in table.Rows)
+                {
+                    string code = (string)row["ItemCode"];
+                    string desc = (string)row["ItemDesc"];
+                    decimal cost = (decimal)row["Cost"];
+
+                    InvoiceItems.Add(new clsItem(code, desc, cost));
+                }
+
+
+                UpdateInvoiceInfo();
             }
-
-            // Fills the Items List
-            int iRetVal = 0;
-            DataSet ds = da.ExecuteSQLStatement(sql.SelectInvoiceItemData(), ref iRetVal);
-            DataTable table = ds.Tables[0];
-
-            foreach (DataRow row in table.Rows)
+            catch (Exception ex)
             {
-                ItemList.Add(row["ItemDesc"].ToString());
+                MessageBox.Show(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
-
-
-
-            if (InvoiceItems.Count > 0)
-            {
-                InvoiceItems.Clear();
-            }
-
-            // Fills the Invoice Data Grid with default value
-            ds = da.ExecuteSQLStatement(sql.SelectInvoiceItems(InvoiceNumber.ToString()), ref iRetVal);
-            table = ds.Tables[0];
-
-            foreach (DataRow row in table.Rows)
-            {
-                string code = (string)row["ItemCode"];
-                string desc = (string)row["ItemDesc"];
-                decimal cost = (decimal)row["Cost"];
-
-                InvoiceItems.Add(new clsItem(code, desc, cost));
-            }
-
-
-            UpdateInvoiceInfo();
-
 
         }
 
@@ -146,16 +167,22 @@ namespace Group_Project___Main
         /// </summary>
         public void UpdateItemInfo()
         {
-            // Updates Invoice Label information
-            int iRetVal = 0;
-            DataSet ds = da.ExecuteSQLStatement(sql.SelectItemData(SelectedItem), ref iRetVal);
-            DataTable table = ds.Tables[0];
+            try {
+                // Updates Invoice Label information
+                int iRetVal = 0;
+                DataSet ds = da.ExecuteSQLStatement(sql.SelectItemData(SelectedItem), ref iRetVal);
+                DataTable table = ds.Tables[0];
 
-            foreach (DataRow row in table.Rows)
+                foreach (DataRow row in table.Rows)
+                {
+                    SelectedItem = (string)row["ItemDesc"];
+                    SelectedItemCost = (decimal)row["Cost"];
+                    SelectedItemCode = (string)row["ItemCode"];
+                }
+            }
+            catch (Exception ex)
             {
-                SelectedItem = (string)row["ItemDesc"];
-                SelectedItemCost = (decimal)row["Cost"];
-                SelectedItemCode = (string)row["ItemCode"];
+                MessageBox.Show(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
         }
 
@@ -165,32 +192,36 @@ namespace Group_Project___Main
         /// </summary>
         public void UpdateInvoiceInfo()
         {
+            try {
+                // Update Invoice Label information
+                int iRetVal = 0;
+                DataSet ds = da.ExecuteSQLStatement(sql.SelectInvoiceData(InvoiceNumber.ToString()), ref iRetVal);
+                DataTable table = ds.Tables[0];
 
-            // Update Invoice Label information
-            int iRetVal = 0;
-            DataSet ds = da.ExecuteSQLStatement(sql.SelectInvoiceData(InvoiceNumber.ToString()), ref iRetVal);
-            DataTable table = ds.Tables[0];
+                foreach (DataRow row in table.Rows) // Will only go through 1 row, but this is the only way I know how to access it rn
+                {
+                    InvoiceNumber = (int)row["InvoiceNum"];
+                    DateTime d = (DateTime)row["InvoiceDate"];
+                    InvoiceDate = d.ToString();
+                    InvoiceTotal = (decimal)row["TotalCost"];
+                }
 
-            foreach (DataRow row in table.Rows) // Will only go through 1 row, but this is the only way I know how to access it rn
-            {
-                InvoiceNumber = (int)row["InvoiceNum"];
-                DateTime d = (DateTime)row["InvoiceDate"];
-                InvoiceDate = d.ToString();
-                InvoiceTotal = (decimal)row["TotalCost"];
+                // Double check that invoice total is correct
+                decimal total = 0;
+                foreach (var item in InvoiceItems)
+                {
+                    total += item.ItemCost;
+                }
+                if(InvoiceTotal != total)
+                {
+                    InvoiceTotal = total;
+                    da.ExecuteNonQuery(sql.UpdateInvoiceCost(InvoiceNumber.ToString(), InvoiceTotal));
+                }
             }
-
-            // Double check that invoice total is correct
-            decimal total = 0;
-            foreach (var item in InvoiceItems)
+            catch (Exception ex)
             {
-                total += item.ItemCost;
+                MessageBox.Show(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
-            if(InvoiceTotal != total)
-            {
-                InvoiceTotal = total;
-                da.ExecuteNonQuery(sql.UpdateInvoiceCost(InvoiceNumber.ToString(), InvoiceTotal));
-            }
-            
 
         }
 
@@ -199,39 +230,44 @@ namespace Group_Project___Main
         /// </summary>
         public void AddItem()
         {
-            InvoiceItems.Add(new clsItem(SelectedItemCode, SelectedItem, SelectedItemCost));
+            try {
+                InvoiceItems.Add(new clsItem(SelectedItemCode, SelectedItem, SelectedItemCost));
 
-            InvoiceTotal += SelectedItemCost;
-
-
-            da.ExecuteNonQuery(sql.UpdateInvoiceCost(InvoiceNumber.ToString(), InvoiceTotal));
+                InvoiceTotal += SelectedItemCost;
 
 
-            // An inelegant way of adding 1 to the the line number
-            int iRetVal = 0;
-            string lineNum = sql.GetLineItemNum(InvoiceNumber.ToString());
-            DataSet ds = da.ExecuteSQLStatement(lineNum, ref iRetVal);
-            DataTable dt = ds.Tables[0];
-            int lineNumInt;
-            if (dt.Rows.Count > 0)
-            {
-                DataRow dr = dt.Rows[0];
-                lineNumInt = (int)dr["LineItemNum"] + 1;
-            } else
-            {
-                lineNumInt = 1;
+                da.ExecuteNonQuery(sql.UpdateInvoiceCost(InvoiceNumber.ToString(), InvoiceTotal));
+
+
+                // An inelegant way of adding 1 to the the line number
+                int iRetVal = 0;
+                string lineNum = sql.GetLineItemNum(InvoiceNumber.ToString());
+                DataSet ds = da.ExecuteSQLStatement(lineNum, ref iRetVal);
+                DataTable dt = ds.Tables[0];
+                int lineNumInt;
+                if (dt.Rows.Count > 0)
+                {
+                    DataRow dr = dt.Rows[0];
+                    lineNumInt = (int)dr["LineItemNum"] + 1;
+                } else
+                {
+                    lineNumInt = 1;
+                }
+
+                /*
+                int lineNumInt = int.Parse(lineNum);
+                lineNumInt++;
+                lineNum = lineNumInt.ToString();
+                */
+
+                // Insert new item into the database
+                string sSQL = sql.InsertItem(InvoiceNumber.ToString(), lineNumInt.ToString(), SelectedItemCode);
+                da.ExecuteNonQuery(sSQL);
             }
-
-            /*
-            int lineNumInt = int.Parse(lineNum);
-            lineNumInt++;
-            lineNum = lineNumInt.ToString();
-            */
-
-            // Insert new item into the database
-            string sSQL = sql.InsertItem(InvoiceNumber.ToString(), lineNumInt.ToString(), SelectedItemCode);
-            da.ExecuteNonQuery(sSQL);
-
+            catch (Exception ex)
+            {
+                MessageBox.Show(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
 
@@ -244,23 +280,25 @@ namespace Group_Project___Main
         /// <param name="name"></param>
         public void DeleteItem(object SI)
         {
+            try {
 
+                clsItem SelectedItem = (clsItem)SI;
+                decimal itemCost = SelectedItem.ItemCost;
+                InvoiceTotal -= itemCost;
 
-            clsItem SelectedItem = (clsItem)SI;
-            decimal itemCost = SelectedItem.ItemCost;
-            InvoiceTotal -= itemCost;
+                InvoiceItems.Remove(SelectedItem);
 
-            InvoiceItems.Remove(SelectedItem);
+                da.ExecuteNonQuery(sql.UpdateInvoiceCost(InvoiceNumber.ToString(), InvoiceTotal));
 
-            da.ExecuteNonQuery(sql.UpdateInvoiceCost(InvoiceNumber.ToString(), InvoiceTotal));
+                //Delete Item from Database
+                string sSQL = sql.DeleteSelectedItem(InvoiceNumber.ToString(), SelectedItem.ItemCode);
+                da.ExecuteNonQuery(sSQL);
 
-            //Delete Item from Database
-            string sSQL = sql.DeleteSelectedItem(InvoiceNumber.ToString(), SelectedItem.ItemCode);
-            da.ExecuteNonQuery(sSQL);
-            //Getting an error here for some reason.
-            //Error says no value is given for required parameters.
-
-
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -268,28 +306,34 @@ namespace Group_Project___Main
         /// </summary>
         public void CreateInvoice()
         {
-            // An inelegant way of adding 1 to the the highest invoice number
-            int iRetVal = 0;
-            string lineNum = sql.GetInvoiceNum();
-            DataSet ds = da.ExecuteSQLStatement(lineNum, ref iRetVal);
-            DataTable dt = ds.Tables[0];
+            try {
+                // An inelegant way of adding 1 to the the highest invoice number
+                int iRetVal = 0;
+                string lineNum = sql.GetInvoiceNum();
+                DataSet ds = da.ExecuteSQLStatement(lineNum, ref iRetVal);
+                DataTable dt = ds.Tables[0];
             
 
-            if (dt.Rows.Count > 0)
-            {
-                DataRow dr = dt.Rows[0];
-                InvoiceNumber = (int)dr["InvoiceNum"] + 1;
-            }
-            else
-            {
-                InvoiceNumber = 5000; // default lowest invoice number
-            }
+                if (dt.Rows.Count > 0)
+                {
+                    DataRow dr = dt.Rows[0];
+                    InvoiceNumber = (int)dr["InvoiceNum"] + 1;
+                }
+                else
+                {
+                    InvoiceNumber = 5000; // default lowest invoice number
+                }
 
-            InvoiceDate = DateTime.Today.ToString();
-            InvoiceTotal = 0;
+                InvoiceDate = DateTime.Today.ToString();
+                InvoiceTotal = 0;
 
-            da.ExecuteNonQuery(sql.InsertInvoice(InvoiceNumber.ToString(), DateTime.Today.ToString()));
-            
+                da.ExecuteNonQuery(sql.InsertInvoice(InvoiceNumber.ToString(), DateTime.Today.ToString()));
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
 

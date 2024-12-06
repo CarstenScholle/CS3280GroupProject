@@ -17,21 +17,23 @@
         <Label x:Name="lblInvoiceNumber" Content="Invoice Number: " HorizontalAlignment="Left" Margin="79,40,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lblInvoiceDate" Content="Invoice Date: " HorizontalAlignment="Left" Margin="79,71,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lblInvoiceTotal" Content="Invoice Total:  " HorizontalAlignment="Left" Margin="79,102,0,0" VerticalAlignment="Top"/>
-        <Label Content="Items:  " HorizontalAlignment="Left" Margin="19,225,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblItemsLabel" Content="Items:  " HorizontalAlignment="Left" Margin="19,225,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lblItemPrice" Content="Price:  " HorizontalAlignment="Left" Margin="43,305,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lblItemName" Content="Name:  " HorizontalAlignment="Left" Margin="38,279,0,0" VerticalAlignment="Top"/>
 
-        <Menu Margin="0,0,0,0" Width="187" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <MenuItem Header="Search Invoices" Click="Search_Invoices_Click"/>
-            <MenuItem Header="Edit Inventory" Click="Edit_Invoices_Click"/>
+        <Menu x:Name="Menu" Margin="0,0,0,0" Width="187" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <MenuItem x:Name="miSearch" Header="Search Invoices" Click="Search_Invoices_Click"/>
+            <MenuItem x:Name="miEdit" Header="Edit Inventory" Click="Edit_Invoices_Click"/>
         </Menu>
 
-        <DataGrid x:Name="dgInvoice" Width="400" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,25,25,0" Height="400"/>
-        <Button Content="Add Item" HorizontalAlignment="Left" Margin="43,346,0,0" VerticalAlignment="Top" Click="AddItem_Button_Click"/>
-        <Button Content="Delete Item" HorizontalAlignment="Left" Margin="289,346,0,0" VerticalAlignment="Top" Click="DeleteItem_Button_Click"/>
+        <DataGrid x:Name="dgInvoice" Width="400" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,25,25,0" Height="400" IsEnabled="False"/>
+        <Button x:Name="btnAdd" Content="Add Item" HorizontalAlignment="Left" Margin="43,346,0,0" VerticalAlignment="Top" Click="AddItem_Button_Click" IsEnabled="False"/>
+        <Button x:Name="btnDelete" Content="Delete Item" HorizontalAlignment="Left" Margin="289,346,0,0" VerticalAlignment="Top" Click="DeleteItem_Button_Click" IsEnabled="False"/>
 
-        <ComboBox x:Name="cbItemList" HorizontalAlignment="Left" Margin="67,229,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBox_SelectionChanged"/>
-        <Button Content="Create New Invoice" HorizontalAlignment="Left" Margin="73,149,0,0" VerticalAlignment="Top" Click="CreateInvoice_Click"/>
+        <ComboBox x:Name="cbItemList" HorizontalAlignment="Left" Margin="67,229,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBox_SelectionChanged" IsEnabled="False"/>
+        <Button x:Name="btnCreate" Content="Create New Invoice" HorizontalAlignment="Left" Margin="120,146,0,0" VerticalAlignment="Top" Click="CreateInvoice_Click"/>
+        <Button x:Name="btnEdit" Content="Edit Invoice" HorizontalAlignment="Left" Margin="32,192,0,0" VerticalAlignment="Top" Click="btnEdit_Click" />
+        <Button x:Name="btnSave" Content="Save Invoice" HorizontalAlignment="Left" Margin="215,192,0,0" VerticalAlignment="Top" Click="btnSave_Click" />
 
 
     </Grid>

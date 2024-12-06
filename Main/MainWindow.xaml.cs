@@ -28,17 +28,25 @@ namespace Group_Project___Main
 
         // Everything needs try-catch blocks
 
-
+        /// <summary>
+        /// Main Logic Class
+        /// </summary>
         clsMainLogic mainLogic = new clsMainLogic();
 
+        /// <summary>
+        /// Search Window
+        /// </summary>
         wndSearch searchWindow;
+
+        /// <summary>
+        /// Items Window
+        /// </summary>
         wndItems itemsWindow;
         
 
-
-        private bool unsavedChanges = false;
-
-
+        /// <summary>
+        /// Main Window constructor
+        /// </summary>
         public MainWindow()
         {
             try
@@ -72,16 +80,22 @@ namespace Group_Project___Main
         /// </summary>
         private void MainRefresh()
         {
-            mainLogic.FillData();
+            try {
+                mainLogic.FillData();
 
-            lblInvoiceNumber.Content = "Invoice Number: " + mainLogic.InvoiceNumber;
-            lblInvoiceDate.Content = "Invoice Date: " + mainLogic.InvoiceDate;
+                lblInvoiceNumber.Content = "Invoice Number: " + mainLogic.InvoiceNumber;
+                lblInvoiceDate.Content = "Invoice Date: " + mainLogic.InvoiceDate;
             
-            dgInvoice.Items.Refresh();
+                dgInvoice.Items.Refresh();
 
             
 
-            lblInvoiceTotal.Content = "Invoice Total: " + mainLogic.InvoiceTotal;
+                lblInvoiceTotal.Content = "Invoice Total: " + mainLogic.InvoiceTotal;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
 
@@ -114,9 +128,14 @@ namespace Group_Project___Main
         /// <param name="e"></param>
         private void CreateInvoice_Click(object sender, RoutedEventArgs e)
         {
-            mainLogic.CreateInvoice();
-            MainRefresh();
-
+            try {
+                mainLogic.CreateInvoice();
+                MainRefresh();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
 
@@ -127,9 +146,15 @@ namespace Group_Project___Main
         /// <param name="e"></param>
         private void AddItem_Button_Click(object sender, RoutedEventArgs e)
         {
-            mainLogic.AddItem();
-            dgInvoice.Items.Refresh();
-            lblInvoiceTotal.Content = "Invoice Total: " + mainLogic.InvoiceTotal;
+            try {
+                mainLogic.AddItem();
+                dgInvoice.Items.Refresh();
+                lblInvoiceTotal.Content = "Invoice Total: " + mainLogic.InvoiceTotal;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -139,17 +164,22 @@ namespace Group_Project___Main
         /// <param name="e"></param>
         private void DeleteItem_Button_Click(object sender, RoutedEventArgs e)
         {
-            // Check if an item was selected
-            if (dgInvoice.SelectedItem != null)
-            {
-                mainLogic.DeleteItem(dgInvoice.SelectedItem);
-                //dgInvoice.ItemsSource = mainLogic.InvoiceItems;
-                // I thought when you remove an item from the list ItemsSource is set to
-                // the item will be removed on the GUI as well because of DataBinding
-                dgInvoice.Items.Refresh();
-                lblInvoiceTotal.Content = "Invoice Total: " + mainLogic.InvoiceTotal;
+            try {
+                // Check if an item was selected
+                if (dgInvoice.SelectedItem != null)
+                {
+                    mainLogic.DeleteItem(dgInvoice.SelectedItem);
+                    //dgInvoice.ItemsSource = mainLogic.InvoiceItems;
+                    // I thought when you remove an item from the list ItemsSource is set to
+                    // the item will be removed on the GUI as well because of DataBinding
+                    dgInvoice.Items.Refresh();
+                    lblInvoiceTotal.Content = "Invoice Total: " + mainLogic.InvoiceTotal;
+                }
             }
-            
+            catch (Exception ex)
+            {
+                MessageBox.Show(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
 
@@ -160,17 +190,22 @@ namespace Group_Project___Main
         /// <param name="e"></param>
         private void Edit_Invoices_Click(object sender, RoutedEventArgs e)
         {
-            this.Hide();
-            itemsWindow = new wndItems();
-            itemsWindow.openWindow();
-            this.Show();
+            try {
+                this.Hide();
+                itemsWindow = new wndItems();
+                itemsWindow.openWindow();
+                this.Show();
 
 
-            // refresh item list combobox
-            mainLogic.FillData();
-            cbItemList.Items.Refresh();
+                // refresh item list combobox
+                mainLogic.FillData();
+                cbItemList.Items.Refresh();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
 
-            
         }
 
         /// <summary>
@@ -180,18 +215,24 @@ namespace Group_Project___Main
         /// <param name="e"></param>
         private void Search_Invoices_Click(object sender, RoutedEventArgs e)
         {
-            this.Hide();
-            searchWindow = new wndSearch();
-            searchWindow.ShowDialog();
-            this.Show();
-            // Passing data around
-            string sSearchedItem = searchWindow.SelectedInvoiceID();
-            if (sSearchedItem != null)
-            {
-                mainLogic.InvoiceNumber = int.Parse(sSearchedItem);
-                mainLogic.UpdateInvoiceInfo();
+            try {
+                this.Hide();
+                searchWindow = new wndSearch();
+                searchWindow.ShowDialog();
+                this.Show();
+                // Passing data around
+                string sSearchedItem = searchWindow.SelectedInvoiceID();
+                if (sSearchedItem != null && sSearchedItem != "0")
+                {
+                    mainLogic.InvoiceNumber = int.Parse(sSearchedItem);
+                    mainLogic.UpdateInvoiceInfo();
+                    MainRefresh();
+                }
             }
-            MainRefresh();
+            catch (Exception ex)
+            {
+                MessageBox.Show(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
 
@@ -203,7 +244,53 @@ namespace Group_Project___Main
         /// <param name="e"></param>
         private void Window_Closed(object sender, EventArgs e)
         {
-            Application.Current.Shutdown();
+            try {
+                Application.Current.Shutdown();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Method for enabling editing of the invoice
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnEdit_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                cbItemList.IsEnabled = true;
+                btnAdd.IsEnabled = true;
+                btnDelete.IsEnabled = true;
+                dgInvoice.IsEnabled = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Method for closing editing mode. Everything saves automatically from other methods.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                cbItemList.IsEnabled = false;
+                btnAdd.IsEnabled = false;
+                btnDelete.IsEnabled = false;
+                dgInvoice.IsEnabled = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
     }
 
